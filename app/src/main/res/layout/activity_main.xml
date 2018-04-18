@@ -37,6 +37,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Выполнить"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/test_db_result_textview"
+            android:layout_marginTop="100dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="Result here"/>
 
     </LinearLayout>
 

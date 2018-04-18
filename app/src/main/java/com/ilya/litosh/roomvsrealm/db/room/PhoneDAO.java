@@ -9,6 +9,8 @@ import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 @Dao
 public interface PhoneDAO {
 
@@ -19,6 +21,6 @@ public interface PhoneDAO {
     void deletePhone(Phone phone);
 
     @Query("SELECT * FROM phone")
-    List<Phone> getAllPhones();
+    Flowable<List<Phone>> getAllPhonesRx();
 
 }

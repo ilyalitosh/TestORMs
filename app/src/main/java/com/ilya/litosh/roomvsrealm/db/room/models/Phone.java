@@ -10,6 +10,7 @@ public class Phone {
     private long id;
     private String name;
     private String model;
+    private int price;
 
 
     public long getId() {
@@ -34,5 +35,13 @@ public class Phone {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
