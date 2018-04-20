@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatSpinner
@@ -31,11 +31,18 @@
                 android:layout_weight="1">
 
             </android.support.v7.widget.AppCompatSpinner>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/input_rows"
+                android:hint="rows for insert"/>
 
         </LinearLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/submit_button"
             android:text="Выполнить"/>
         <TextView
             android:layout_width="match_parent"

@@ -4,8 +4,10 @@ import android.content.Context;
 
 public interface IResultShow {
 
-    void showRoomResult(Context context, int type);
+    void showRoomResult(Context context, int type, int rows);
 
-    void showRealmResult(Context context, int type);
+    void showRealmResult(Context context, int type, int rows);
+
+    void showGreenDAOResult(Context context, int type);
 
 }

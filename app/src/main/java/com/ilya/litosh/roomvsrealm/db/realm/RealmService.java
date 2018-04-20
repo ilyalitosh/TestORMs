@@ -5,15 +5,10 @@ import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
@@ -27,17 +22,25 @@ public class RealmService implements IRealmService{
             .build();
 
     @Override
-    public void addCar(Car car) {
+    public void addCars(int rows) {
         Realm realm = Realm.getInstance(config);
+        List<Car> cars = new ArrayList<>();
         long id;
         try{
             id = realm.where(Car.class).max("id").intValue() + 1;
         }catch (Exception e){
             id = 0L;
         }
-        car.setId(id);
+        for(long i = id; i < id + rows; i++){
+            Car car = new Car();
+            car.setColor("Black");
+            car.setFuelCapacity(113);
+            car.setPrice(666);
+            car.setId(i);
+            cars.add(car);
+        }
         realm.beginTransaction();
-        realm.copyToRealm(car);
+        realm.insert(cars);
         realm.commitTransaction();
         realm.close();
     }

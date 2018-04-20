@@ -10,12 +10,11 @@ import io.realm.RealmObject;
 
 public interface IRealmService {
 
-    void addCar(Car car);
+    void addCars(int rows);
 
     List<Car> getAllCars();
 
     //RxAndroid
-
     Observable<List<Car>> getAllCarsRx();
 
 }
