@@ -12,12 +12,15 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.ilya.litosh.roomvsrealm.R;
+import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
 import com.ilya.litosh.roomvsrealm.db.objectbox.OBoxService;
 import com.ilya.litosh.roomvsrealm.db.objectbox.models.Figure;
 import com.ilya.litosh.roomvsrealm.db.room.RoomService;
 import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
+import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDBService;
+import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.presenters.DBChooserPresenter;
 import com.ilya.litosh.roomvsrealm.presenters.DBResultPresenter;
@@ -25,8 +28,12 @@ import com.ilya.litosh.roomvsrealm.presenters.TypeChooserPresenter;
 import com.ilya.litosh.roomvsrealm.views.DBChooserView;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 import com.ilya.litosh.roomvsrealm.views.TypeChooserView;
+import com.snappydb.SnappydbException;
 
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 
 public class HomeActivity extends MvpAppCompatActivity implements DBChooserView, TypeChooserView, DBResultView {
@@ -56,6 +63,43 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
 
         dbChooserPresenter.setAdapter(this, R.array.db_list);
         typeChooserPresenter.setAdapter(this, R.array.type_list);
+        Book book = new Book();
+        book.setAuthor("Толстой");
+        book.setDate(2005);
+        book.setName("Пессель");
+        book.setPagesCount(1000);
+        SnappyDBService snappyDBService = new SnappyDBService();
+        snappyDBService.addBook(book, "android:1").subscribe();
+        snappyDBService.addBook(book, "android:2").subscribe();
+        snappyDBService.addBook(book, "android:3").subscribe();
+        snappyDBService.addBook(book, "android:4").subscribe();
+        snappyDBService.addBook(book, "android:5").subscribe();
+        snappyDBService.addBook(book, "android:6").subscribe();
+        snappyDBService.addBook(book, "android:7").subscribe();
+        snappyDBService.getBooks()
+                .subscribe(new Observer<List<Book>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Book> books) {
+                        for(Book book : books){
+                            System.out.println(book.getName() + " " + book.getAuthor());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 

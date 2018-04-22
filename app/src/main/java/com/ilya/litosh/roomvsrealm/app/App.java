@@ -5,6 +5,10 @@ import android.app.Application;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoMaster;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoSession;
 import com.ilya.litosh.roomvsrealm.db.objectbox.models.MyObjectBox;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappyDB;
+import com.snappydb.SnappydbException;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -15,6 +19,7 @@ public class App extends Application {
     private static DaoSession daoWritingSession;
     private static DaoSession daoReadingSession;
     private static BoxStore boxStore;
+    private static DB snappyDBSession;
 
     @Override
     public void onCreate() {
@@ -26,7 +31,11 @@ public class App extends Application {
         daoReadingSession = new DaoMaster(dbRead).newSession();
 
         boxStore = MyObjectBox.builder().androidContext(this).build();
-
+        try {
+            snappyDBSession = DBFactory.open(App.this, "snappydb-db");
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     public static DaoSession getDaoWritingSession(){
@@ -39,6 +48,10 @@ public class App extends Application {
 
     public static BoxStore getOBoxSession(){
         return boxStore;
+    }
+
+    public static DB getSnappyDBSession(){
+        return snappyDBSession;
     }
 
 }
