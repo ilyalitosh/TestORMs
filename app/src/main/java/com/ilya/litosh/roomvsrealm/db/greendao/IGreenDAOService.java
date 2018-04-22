@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public interface IGreenDAOService {
 
-    void addFruit(Fruit fruit);
+    void addFruits(int rows);
 
     List<Fruit> getFruits();
 

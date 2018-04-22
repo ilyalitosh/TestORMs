@@ -4,6 +4,7 @@ import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.FruitDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -12,7 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GreenDAOService implements IGreenDAOService {
     @Override
-    public void addFruit(Fruit fruit) {
+    public void addFruits(int rows) {
         long id;
         try{
             id = App.getDaoReadingSession()
@@ -27,10 +28,21 @@ public class GreenDAOService implements IGreenDAOService {
         }catch (IndexOutOfBoundsException e){
             id = 0L;
         }
-        fruit.setId(id);
+        List<Fruit> fruits = new ArrayList<>();
+        for(long i = id; i < rows + id; i++){
+            Fruit apple = new Fruit();
+            apple.setName("Апельсин");
+            apple.setColor("Orange");
+            apple.setWeight(150);
+            apple.setId(i);
+            fruits.add(apple);
+            /*App.getDaoWritingSession()
+                    .getFruitDao()
+                    .insert(apple);*/
+        }
         App.getDaoWritingSession()
                 .getFruitDao()
-                .insert(fruit);
+                .insertInTx(fruits);
     }
 
     @Override
@@ -44,7 +56,16 @@ public class GreenDAOService implements IGreenDAOService {
     public Observable<List<Fruit>> getFruitsRx() {
         FruitDao fruitDao = App.getDaoReadingSession()
                 .getFruitDao();
-        return Observable.just(fruitDao.loadAll())
+        /*return Observable.just(fruitDao.loadAll())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());*/
+        return Observable.just(Fruit.class)
+                .flatMap(fruitClass -> {
+                    return Observable.just(fruitClass)
+                            .map(fruitClass1 -> {
+                                return fruitDao.loadAll();
+                            });
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

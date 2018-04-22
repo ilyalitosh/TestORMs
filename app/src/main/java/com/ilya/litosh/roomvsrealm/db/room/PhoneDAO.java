@@ -10,12 +10,16 @@ import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @Dao
 public interface PhoneDAO {
 
     @Insert
     void addPhone(Phone phone);
+
+    @Insert
+    void addPhones(List<Phone> phones);
 
     @Delete
     void deletePhone(Phone phone);

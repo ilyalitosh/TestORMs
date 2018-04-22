@@ -8,6 +8,8 @@ public interface IResultShow {
 
     void showRealmResult(Context context, int type, int rows);
 
-    void showGreenDAOResult(Context context, int type);
+    void showGreenDAOResult(Context context, int type, int rows);
+
+    void showOBoxResult(Context context, int type, int rows);
 
 }

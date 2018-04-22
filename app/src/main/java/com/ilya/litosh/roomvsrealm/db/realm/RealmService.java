@@ -31,16 +31,18 @@ public class RealmService implements IRealmService{
         }catch (Exception e){
             id = 0L;
         }
+        realm.beginTransaction();
         for(long i = id; i < id + rows; i++){
             Car car = new Car();
             car.setColor("Black");
             car.setFuelCapacity(113);
             car.setPrice(666);
             car.setId(i);
-            cars.add(car);
+            //cars.add(car);
+            realm.insert(car);
         }
-        realm.beginTransaction();
-        realm.insert(cars);
+        //realm.beginTransaction();
+        //realm.insert(cars);
         realm.commitTransaction();
         realm.close();
     }

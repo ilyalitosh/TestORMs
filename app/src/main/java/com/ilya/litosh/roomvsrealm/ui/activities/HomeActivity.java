@@ -14,6 +14,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.ilya.litosh.roomvsrealm.R;
 import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
+import com.ilya.litosh.roomvsrealm.db.objectbox.OBoxService;
+import com.ilya.litosh.roomvsrealm.db.objectbox.models.Figure;
 import com.ilya.litosh.roomvsrealm.db.room.RoomService;
 import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
@@ -55,10 +57,6 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
         dbChooserPresenter.setAdapter(this, R.array.db_list);
         typeChooserPresenter.setAdapter(this, R.array.type_list);
 
-        //dbResultPresenter.showGreenDAOResult(this, CRUDType.CREATE);
-        //dbResultPresenter.showGreenDAOResult(this, CRUDType.READ);
-
-
     }
 
     private void initComponents(){
@@ -77,15 +75,24 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                     case 0:
                         switch (spinnerDB.getSelectedItemPosition()){
                             case 0:
-                                dbResultPresenter.showRealmResult(HomeActivity.this, CRUDType.CREATE, Integer.valueOf(inputRows.getText().toString()));
+                                dbResultPresenter.showRealmResult(HomeActivity.this,
+                                        CRUDType.CREATE,
+                                        Integer.valueOf(inputRows.getText().toString()));
                                 break;
                             case 1:
-                                dbResultPresenter.showRoomResult(HomeActivity.this, CRUDType.CREATE, Integer.valueOf(inputRows.getText().toString()));
+                                dbResultPresenter.showRoomResult(HomeActivity.this,
+                                        CRUDType.CREATE,
+                                        Integer.valueOf(inputRows.getText().toString()));
                                 break;
                             case 2:
-                                dbResultPresenter.showGreenDAOResult(HomeActivity.this, CRUDType.CREATE);
+                                dbResultPresenter.showGreenDAOResult(HomeActivity.this,
+                                        CRUDType.CREATE,
+                                        Integer.valueOf(inputRows.getText().toString()));
                                 break;
                             case 3:
+                                dbResultPresenter.showOBoxResult(HomeActivity.this,
+                                        CRUDType.CREATE,
+                                        Integer.valueOf(inputRows.getText().toString()));
                                 break;
                             case 4:
                                 break;
@@ -94,15 +101,24 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                     case 1:
                         switch (spinnerDB.getSelectedItemPosition()){
                             case 0:
-                                dbResultPresenter.showRealmResult(HomeActivity.this, CRUDType.READ, Integer.valueOf(inputRows.getText().toString()));
+                                dbResultPresenter.showRealmResult(HomeActivity.this,
+                                        CRUDType.READ,
+                                        0);
                                 break;
                             case 1:
-                                dbResultPresenter.showRoomResult(HomeActivity.this, CRUDType.READ, Integer.valueOf(inputRows.getText().toString()));
+                                dbResultPresenter.showRoomResult(HomeActivity.this,
+                                        CRUDType.READ,
+                                        0);
                                 break;
                             case 2:
-                                dbResultPresenter.showGreenDAOResult(HomeActivity.this, CRUDType.READ);
+                                dbResultPresenter.showGreenDAOResult(HomeActivity.this,
+                                        CRUDType.READ,
+                                        0);
                                 break;
                             case 3:
+                                dbResultPresenter.showOBoxResult(HomeActivity.this,
+                                        CRUDType.READ,
+                                        0);
                                 break;
                             case 4:
                                 break;
