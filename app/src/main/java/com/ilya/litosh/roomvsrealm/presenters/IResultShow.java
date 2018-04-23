@@ -12,4 +12,6 @@ public interface IResultShow {
 
     void showOBoxResult(Context context, int type, int rows);
 
+    void showSnappyDBResult(Context context, int type, int rows);
+
 }

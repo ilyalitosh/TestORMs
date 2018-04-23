@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoomVsRealm</string>
+    <string name="app_name">ORMs</string>
 
     <array name="db_list">
         <item>Realm</item>

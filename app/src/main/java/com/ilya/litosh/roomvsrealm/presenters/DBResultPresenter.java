@@ -13,11 +13,14 @@ import com.ilya.litosh.roomvsrealm.db.realm.RealmService;
 import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
 import com.ilya.litosh.roomvsrealm.db.room.RoomService;
 import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
+import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDBService;
+import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -59,6 +62,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                System.out.println(phones.size() + " элементов");
                             }
 
                             @Override
@@ -88,10 +92,10 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                         Phone samsung = new Phone();
                         samsung.setName("Samsung");
                         samsung.setModel("i9150");
-                        //phones.add(samsung);
-                        db.getPhoneDAO().addPhone(samsung);
+                        phones.add(samsung);
+                        //db.getPhoneDAO().addPhone(samsung);
                     }
-                    //db.getPhoneDAO().addPhones(phones);
+                    db.getPhoneDAO().addPhones(phones);
 
                     end = System.currentTimeMillis();
                     result = (end + .0 - start) / 1000;
@@ -133,6 +137,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 StringBuilder s1 = new StringBuilder();
                                 s1.append(result1).append(" сек.");
                                 getViewState().showResult(s1.toString());
+                                System.out.println(cars.size() + " элементов");
                             }
 
                             @Override
@@ -257,7 +262,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                     StringBuilder s = new StringBuilder();
                     s.append(result.get()).append(" сек.");
                     getViewState().showResult(s.toString());
-                    System.out.println("Элементов в таблице сейчас: " + oBoxService.getAllFigures().size());
+                    //System.out.println("Элементов в таблице сейчас: " + oBoxService.getAllFigures().size());
                 })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -278,11 +283,76 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onNext(List<Figure> figures) {
                                 end1.set(System.currentTimeMillis());
                                 result1.set((end1.get() + .0 - start1.get())/1000);
-
                                 StringBuilder s1 = new StringBuilder();
                                 s1.append(result1.get()).append(" сек.");
                                 getViewState().showResult(s1.toString());
                                 System.out.println("Кол-во: " + figures.size());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
+        }
+    }
+
+    @Override
+    public void showSnappyDBResult(Context context, int type, int rows) {
+        SnappyDBService snappyDBService = new SnappyDBService();
+        switch (type){
+            case CRUDType.CREATE:
+                AtomicLong start = new AtomicLong();
+                AtomicLong end = new AtomicLong();
+                AtomicReference<Double> result = new AtomicReference<>((double) 0);
+                Observable.fromCallable(() -> {
+                    for(int i = 0; i < rows; i++){
+                        Book book = new Book();
+                        book.setAuthor("Толстой");
+                        book.setDate(2005);
+                        book.setName("Пессель");
+                        book.setPagesCount(1000);
+                        snappyDBService.addBook(book, "android:"+String.valueOf(i)).subscribe();
+                    }
+                    return new Object();
+                }).doOnSubscribe(disposable -> {
+                    start.set(System.currentTimeMillis());
+                }).doOnComplete(() -> {
+                    end.set(System.currentTimeMillis());
+                    result.set((end.get() + .0 - start.get())/1000);
+                    StringBuilder s = new StringBuilder();
+                    s.append(result.get()).append(" сек.");
+                    getViewState().showResult(s.toString());
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+                break;
+            case CRUDType.READ:
+                AtomicLong start1 = new AtomicLong();
+                AtomicLong end1 = new AtomicLong();
+                AtomicReference<Double> result1 = new AtomicReference<>((double) 0);
+                snappyDBService.getBooks()
+                        .subscribe(new Observer<List<Book>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start1.set(System.currentTimeMillis());
+                            }
+
+                            @Override
+                            public void onNext(List<Book> books) {
+                                end1.set(System.currentTimeMillis());
+                                result1.set((end1.get() + .0 - start1.get())/1000);
+                                StringBuilder s1 = new StringBuilder();
+                                s1.append(result1.get()).append(" сек.");
+                                getViewState().showResult(s1.toString());
+                                System.out.println(books.size() + " элементов");
                             }
 
                             @Override

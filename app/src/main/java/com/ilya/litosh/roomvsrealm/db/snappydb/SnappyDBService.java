@@ -1,6 +1,5 @@
 package com.ilya.litosh.roomvsrealm.db.snappydb;
 
-import com.esotericsoftware.kryo.io.Input;
 import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 
@@ -30,11 +29,9 @@ public class SnappyDBService implements ISnappyDBService {
     public Observable<List<Book>> getBooks() {
         return Observable.just(Book.class)
                 .flatMap(bookClass -> {
-
-                    String[] keys = App.getSnappyDBSession().findKeysBetween("android:0", "android:7");
+                    String[] keys = App.getSnappyDBSession().findKeys("android");
                     List<Book> books = new ArrayList<>();
                     for(int i = 0; i < keys.length; i++){
-                        System.out.println("------111111-------   " + keys[i]);
                         books.add(App.getSnappyDBSession().getObject(keys[i], Book.class));
                     }
                     return Observable.just(books);
