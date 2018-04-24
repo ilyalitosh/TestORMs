@@ -5,15 +5,14 @@ import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 public class RealmService implements IRealmService{
     RealmConfiguration config = new RealmConfiguration.Builder()
@@ -24,7 +23,7 @@ public class RealmService implements IRealmService{
     @Override
     public void addCars(int rows) {
         Realm realm = Realm.getInstance(config);
-        List<Car> cars = new ArrayList<>();
+        List<Car> cars = new /*CopyOnWrite*/ArrayList<>();
         long id;
         try{
             id = realm.where(Car.class).max("id").intValue() + 1;
@@ -41,6 +40,13 @@ public class RealmService implements IRealmService{
             cars.add(car);
             //realm.insert(car);
         }
+        /*Car car = new Car();
+        car.setColor("Green");
+        car.setFuelCapacity(113);
+        car.setPrice(666);
+        car.setId(id + rows);
+        cars.add(car);*/
+
         realm.beginTransaction();
         realm.insert(cars);
         realm.commitTransaction();
@@ -60,14 +66,38 @@ public class RealmService implements IRealmService{
     @Override
     public Observable<List<Car>> getAllCarsRx() {
         Realm realm = Realm.getInstance(config);
-        return Observable.just(realm.where(Car.class).findAll())
-                .flatMap(new Function<RealmResults<Car>, ObservableSource<List<Car>>>() {
+        return Observable.just(Car.class)
+                .flatMap(new Function<Class<Car>, ObservableSource<List<Car>>>() {
                     @Override
-                    public ObservableSource<List<Car>> apply(RealmResults<Car> cars) throws Exception {
-                        return Observable.just(cars);
+                    public ObservableSource<List<Car>> apply(Class<Car> carClass) throws Exception {
+                        return Observable.just(realm.where(Car.class).findAll());
                     }
                 })
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<Car> getCarById(long id) {
+        Realm realm = Realm.getInstance(config);
+
+        return Observable.just(Car.class)
+                .flatMap(new Function<Class<Car>, ObservableSource<Car>>() {
+                    @Override
+                    public ObservableSource<Car> apply(Class<Car> carClass) throws Exception {
+                        try{
+                            return Observable.just(realm.where(Car.class)
+                                    .equalTo("id", id)
+                                    .findFirst());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

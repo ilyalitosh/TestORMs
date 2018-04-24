@@ -39,4 +39,15 @@ public class SnappyDBService implements ISnappyDBService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<Book> getBookByKey(int key) {
+        return Observable.just(Book.class)
+                .flatMap(bookClass -> {
+                    Book book = App.getSnappyDBSession().getObject("android:" + key, Book.class);
+                    return Observable.just(book);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

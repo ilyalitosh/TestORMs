@@ -27,4 +27,7 @@ public interface PhoneDAO {
     @Query("SELECT * FROM phone")
     Flowable<List<Phone>> getAllPhonesRx();
 
+    @Query("SELECT * FROM phone WHERE id=:id")
+    Flowable<List<Phone>> getPhoneById(long id);
+
 }

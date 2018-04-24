@@ -16,4 +16,6 @@ public interface ISnappyDBService {
 
     Observable<List<Book>> getBooks();
 
+    Observable<Book> getBookByKey(int key);
+
 }

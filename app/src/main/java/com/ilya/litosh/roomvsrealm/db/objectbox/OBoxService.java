@@ -70,4 +70,19 @@ public class OBoxService implements IOBoxService {
                 });
     }
 
+    @Override
+    public Observable<Figure> getFigureById(long id) {
+        Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
+
+        return Observable.just(Figure.class)
+                .flatMap(figureClass -> {
+                    return Observable.just(figureClass)
+                            .map(figureClass1 -> {
+                                return figureBox.get(id);
+                            });
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

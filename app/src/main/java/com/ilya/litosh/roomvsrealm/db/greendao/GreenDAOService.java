@@ -4,11 +4,14 @@ import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.FruitDao;
 
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class GreenDAOService implements IGreenDAOService {
@@ -69,4 +72,27 @@ public class GreenDAOService implements IGreenDAOService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<Fruit> getFruitByID(long id) {
+        FruitDao fruitDao = App.getDaoReadingSession().getFruitDao();
+        return Observable.just(Fruit.class)
+                .flatMap(fruitClass -> {
+                    return Observable.just(fruitClass)
+                            .map(fruitClass1 -> {
+                                return fruitDao
+                                        .queryBuilder()
+                                        .where(FruitDao
+                                                .Properties
+                                                .Id
+                                                .eq(id))
+                                        .list()
+                                        .get(0);
+                            });
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

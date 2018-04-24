@@ -6,5 +6,7 @@ public final class CRUDType {
 
     public static final int READ = 2;
 
+    public static final int READ_SEARCHING = 3;
+
 
 }

@@ -25,4 +25,6 @@ public interface IOBoxService {
 
     Observable<List<Figure>> addFiguresRx(List<Figure> figures);
 
+    Observable<Figure> getFigureById(long id);
+
 }

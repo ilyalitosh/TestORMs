@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatSpinner
@@ -31,12 +31,30 @@
                 android:layout_weight="1">
 
             </android.support.v7.widget.AppCompatSpinner>
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:id="@+id/input_rows"
-                android:hint="rows for insert"/>
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/input_rows"
+                    android:hint="rows count for insert"/>
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/input_id"
+                    android:hint="id for searching"/>
+
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
         <Button

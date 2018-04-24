@@ -18,12 +18,15 @@ import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.FlowableSubscriber;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,7 +42,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
     }
 
     @Override
-    public void showRoomResult(Context context, int type, int rows) {
+    public void showRoomResult(Context context, int type, int rows, long id) {
         final RoomService db = Room
                 .databaseBuilder(
                         context,
@@ -109,31 +112,65 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe();
                 break;
-        }
-    }
-
-    @Override
-    public void showRealmResult(Context context, int type, int rows) {
-        RealmService realmService = new RealmService();
-        switch (type){
-            case CRUDType.READ:
-                long start1, end1;
-                double result1;
-                start1 = System.currentTimeMillis();
-                List<Car> cars = realmService.getAllCars();
-                end1 = System.currentTimeMillis();
-                result1 = (end1 + .0 - start1)/1000;
-                Observable.just(cars)
+            case CRUDType.READ_SEARCHING:
+                db.getPhoneDAO().getPhoneById(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Car>>() {
+                        .subscribe(new DisposableSubscriber<List<Phone>>() {
+                            private long start, end;
+                            private double result;
+
                             @Override
-                            public void onSubscribe(Disposable d) {
+                            public void onNext(List<Phone> phones) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+                                StringBuilder s = new StringBuilder();
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                System.out.println("id:" + phones.get(0).getId() + " name:" + phones.get(0).getName());
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
 
                             }
 
                             @Override
+                            public void onComplete() {
+
+                            }
+
+                            @Override
+                            protected void onStart() {
+                                start = System.currentTimeMillis();
+                                super.onStart();
+                            }
+                        });
+                break;
+        }
+    }
+
+    @Override
+    public void showRealmResult(Context context, int type, int rows, long id) {
+        RealmService realmService = new RealmService();
+        switch (type){
+            case CRUDType.READ:
+                realmService.getAllCarsRx()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Car>>() {
+                            long start1, end1;
+                            double result1;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start1 = System.currentTimeMillis();
+                            }
+
+                            @Override
                             public void onNext(List<Car> cars) {
+                                end1 = System.currentTimeMillis();
+                                result1 = (end1 + .0 - start1)/1000;
+
                                 StringBuilder s1 = new StringBuilder();
                                 s1.append(result1).append(" сек.");
                                 getViewState().showResult(s1.toString());
@@ -172,11 +209,75 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                         .subscribe();
 
                 break;
+            case CRUDType.READ_SEARCHING:
+                realmService.getAllCarsRx()
+                        .subscribe(new Observer<List<Car>>() {
+                            long start, end;
+                            double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(List<Car> cars) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+
+                                StringBuilder s = new StringBuilder();
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                System.out.println(cars.size() + " ------- id:"
+                                        + cars.get(10).getId() + " color:" + cars.get(10).getColor());
+                                System.out.println("id:" + cars.get(43001).getId() + " color:" + cars.get(43001).getColor());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                /*realmService.getCarById(id)
+                        .subscribe(new Observer<Car>() {
+                            long start, end;
+                            double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(Car car) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+
+                                StringBuilder s = new StringBuilder();
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                System.out.println(" id:" + car.getId() + " color:" + car.getColor());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });*/
+                break;
         }
     }
 
     @Override
-    public void showGreenDAOResult(Context context, int type,int rows) {
+    public void showGreenDAOResult(Context context, int type, int rows, long id) {
         GreenDAOService dbService = new GreenDAOService();
         switch (type){
             case CRUDType.READ:
@@ -230,11 +331,42 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe();
                 break;
+            case CRUDType.READ_SEARCHING:
+                AtomicLong start1 = new AtomicLong();
+                AtomicLong end1 = new AtomicLong();
+                AtomicReference<Double> result1 = new AtomicReference<>((double) 0);
+                dbService.getFruitByID(id)
+                        .subscribe(new Observer<Fruit>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start1.set(System.currentTimeMillis());
+                            }
+
+                            @Override
+                            public void onNext(Fruit fruit) {
+                                /*System.out.println("Найден " + fruit.getId()
+                                        + " " + fruit.getName());*/
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                end1.set(System.currentTimeMillis());
+                                result1.set((end1.get() + .0 - start1.get())/1000);
+                                StringBuilder s = new StringBuilder();
+                                s.append(result1.get()).append(" сек.");
+                                getViewState().showResult(s.toString());
+                            }
+                        });
         }
     }
 
     @Override
-    public void showOBoxResult(Context context, int type, int rows) {
+    public void showOBoxResult(Context context, int type, int rows, long id) {
         OBoxService oBoxService = new OBoxService();
         switch (type){
             case CRUDType.CREATE:
@@ -300,11 +432,43 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             }
                         });
                 break;
+            case CRUDType.READ_SEARCHING:
+                oBoxService.getFigureById(id)
+                        .subscribe(new Observer<Figure>() {
+                            long start, end;
+                            double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(Figure figure) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+
+                                StringBuilder s = new StringBuilder();
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                System.out.println("id:" + figure.getId() + " name:" + figure.getName());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
         }
     }
 
     @Override
-    public void showSnappyDBResult(Context context, int type, int rows) {
+    public void showSnappyDBResult(Context context, int type, int rows, long id) {
         SnappyDBService snappyDBService = new SnappyDBService();
         switch (type){
             case CRUDType.CREATE:
@@ -353,6 +517,38 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 s1.append(result1.get()).append(" сек.");
                                 getViewState().showResult(s1.toString());
                                 System.out.println(books.size() + " элементов");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
+            case CRUDType.READ_SEARCHING:
+                snappyDBService.getBookByKey((int)id)
+                        .subscribe(new Observer<Book>() {
+                            long start, end;
+                            double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(Book book) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+
+                                StringBuilder s1 = new StringBuilder();
+                                s1.append(result).append(" сек.");
+                                getViewState().showResult(s1.toString());
+                                System.out.println("Name:" + book.getName() + " author:" + book.getAuthor());
                             }
 
                             @Override

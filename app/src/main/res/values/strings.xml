@@ -11,6 +11,7 @@
     <array name="type_list">
         <item>WRITE</item>
         <item>READ</item>
+        <item>SEARCH</item>
     </array>
 
 </resources>

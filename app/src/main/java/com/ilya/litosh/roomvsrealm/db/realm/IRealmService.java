@@ -17,4 +17,6 @@ public interface IRealmService {
     //RxAndroid
     Observable<List<Car>> getAllCarsRx();
 
+    Observable<Car> getCarById(long id);
+
 }

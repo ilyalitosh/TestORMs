@@ -13,6 +13,7 @@ import com.snappydb.SnappydbException;
 import org.greenrobot.greendao.database.Database;
 
 import io.objectbox.BoxStore;
+import io.realm.Realm;
 
 public class App extends Application {
 
@@ -24,6 +25,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Realm
+        Realm.init(this);
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "greendao-db");
         Database dbWrite = helper.getWritableDb();
         Database dbRead = helper.getReadableDb();

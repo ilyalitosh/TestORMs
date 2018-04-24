@@ -36,13 +36,13 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
     private TextView dbResultView;
     private Button submitButton;
     private EditText inputRows;
+    private EditText inputId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Realm
-        Realm.init(this);
+
 
         initComponents();
         initListeners();
@@ -58,6 +58,7 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
         dbResultView = findViewById(R.id.test_db_result_textview);
         submitButton = findViewById(R.id.submit_button);
         inputRows = findViewById(R.id.input_rows);
+        inputId = findViewById(R.id.input_id);
     }
 
     private void initListeners(){
@@ -68,27 +69,32 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                         case 0:
                             dbResultPresenter.showRealmResult(HomeActivity.this,
                                     CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()));
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
                             break;
                         case 1:
                             dbResultPresenter.showRoomResult(HomeActivity.this,
                                     CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()));
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
                             break;
                         case 2:
                             dbResultPresenter.showGreenDAOResult(HomeActivity.this,
                                     CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()));
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
                             break;
                         case 3:
                             dbResultPresenter.showOBoxResult(HomeActivity.this,
                                     CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()));
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
                             break;
                         case 4:
                             dbResultPresenter.showSnappyDBResult(HomeActivity.this,
                                     CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()));
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
                             break;
                     }
                     break;
@@ -97,27 +103,66 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                         case 0:
                             dbResultPresenter.showRealmResult(HomeActivity.this,
                                     CRUDType.READ,
+                                    0,
                                     0);
                             break;
                         case 1:
                             dbResultPresenter.showRoomResult(HomeActivity.this,
                                     CRUDType.READ,
+                                    0,
                                     0);
                             break;
                         case 2:
                             dbResultPresenter.showGreenDAOResult(HomeActivity.this,
                                     CRUDType.READ,
+                                    0,
                                     0);
                             break;
                         case 3:
                             dbResultPresenter.showOBoxResult(HomeActivity.this,
                                     CRUDType.READ,
+                                    0,
                                     0);
                             break;
                         case 4:
                             dbResultPresenter.showSnappyDBResult(HomeActivity.this,
                                     CRUDType.READ,
+                                    0,
                                     0);
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (spinnerDB.getSelectedItemPosition()){
+                        case 0:
+                            dbResultPresenter.showRealmResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
+                            break;
+                        case 1:
+                            dbResultPresenter.showRoomResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
+                            break;
+                        case 2:
+                            dbResultPresenter.showGreenDAOResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
+                            break;
+                        case 3:
+                            dbResultPresenter.showOBoxResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
+                            break;
+                        case 4:
+                            dbResultPresenter.showSnappyDBResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
                             break;
                     }
                     break;

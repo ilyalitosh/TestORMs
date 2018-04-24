@@ -15,4 +15,6 @@ public interface IGreenDAOService {
     //RxAndroid
     Observable<List<Fruit>> getFruitsRx();
 
+    Observable<Fruit> getFruitByID(long id);
+
 }
