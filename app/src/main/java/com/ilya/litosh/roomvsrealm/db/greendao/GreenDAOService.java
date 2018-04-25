@@ -34,7 +34,7 @@ public class GreenDAOService implements IGreenDAOService {
         List<Fruit> fruits = new ArrayList<>();
         for(long i = id; i < rows + id; i++){
             Fruit apple = new Fruit();
-            apple.setName("Апельсин");
+            apple.setName("Яблоко");
             apple.setColor("Orange");
             apple.setWeight(150);
             apple.setId(i);

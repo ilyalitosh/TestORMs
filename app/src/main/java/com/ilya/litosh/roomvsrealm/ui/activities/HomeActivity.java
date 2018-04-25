@@ -20,7 +20,7 @@ import com.ilya.litosh.roomvsrealm.views.TypeChooserView;
 
 import java.util.List;
 
-import io.realm.Realm;
+//import io.realm.Realm;
 
 public class HomeActivity extends MvpAppCompatActivity implements DBChooserView, TypeChooserView, DBResultView {
 

@@ -1,13 +1,14 @@
 package com.ilya.litosh.roomvsrealm.app;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoMaster;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoSession;
 import com.ilya.litosh.roomvsrealm.db.objectbox.models.MyObjectBox;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
-import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
 import org.greenrobot.greendao.database.Database;
@@ -32,6 +33,8 @@ public class App extends Application {
         Database dbRead = helper.getReadableDb();
         daoWritingSession = new DaoMaster(dbWrite).newSession();
         daoReadingSession = new DaoMaster(dbRead).newSession();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         boxStore = MyObjectBox.builder().androidContext(this).build();
         try {

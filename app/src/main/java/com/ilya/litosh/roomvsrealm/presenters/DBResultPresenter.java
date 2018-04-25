@@ -18,15 +18,11 @@ import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
-import org.reactivestreams.Subscription;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.FlowableSubscriber;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -116,18 +112,18 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                 db.getPhoneDAO().getPhoneById(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new DisposableSubscriber<List<Phone>>() {
+                        .subscribe(new DisposableSubscriber<Phone>() {
                             private long start, end;
                             private double result;
 
                             @Override
-                            public void onNext(List<Phone> phones) {
+                            public void onNext(Phone phone) {
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
                                 StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
-                                System.out.println("id:" + phones.get(0).getId() + " name:" + phones.get(0).getName());
+                                System.out.println("id:" + phone.getId() + " name:" + phone.getName());
                             }
 
                             @Override
@@ -210,39 +206,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
 
                 break;
             case CRUDType.READ_SEARCHING:
-                realmService.getAllCarsRx()
-                        .subscribe(new Observer<List<Car>>() {
-                            long start, end;
-                            double result;
-                            @Override
-                            public void onSubscribe(Disposable d) {
-                                start = System.currentTimeMillis();
-                            }
-
-                            @Override
-                            public void onNext(List<Car> cars) {
-                                end = System.currentTimeMillis();
-                                result = (end + .0 - start)/1000;
-
-                                StringBuilder s = new StringBuilder();
-                                s.append(result).append(" сек.");
-                                getViewState().showResult(s.toString());
-                                System.out.println(cars.size() + " ------- id:"
-                                        + cars.get(10).getId() + " color:" + cars.get(10).getColor());
-                                System.out.println("id:" + cars.get(43001).getId() + " color:" + cars.get(43001).getColor());
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
-                /*realmService.getCarById(id)
+                realmService.getCarById(id)
                         .subscribe(new Observer<Car>() {
                             long start, end;
                             double result;
@@ -271,7 +235,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onComplete() {
 
                             }
-                        });*/
+                        });
                 break;
         }
     }
@@ -344,8 +308,8 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
 
                             @Override
                             public void onNext(Fruit fruit) {
-                                /*System.out.println("Найден " + fruit.getId()
-                                        + " " + fruit.getName());*/
+                                System.out.println("Найден id:" + fruit.getId()
+                                        + " name:" + fruit.getName());
                             }
 
                             @Override

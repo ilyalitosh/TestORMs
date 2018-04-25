@@ -28,6 +28,6 @@ public interface PhoneDAO {
     Flowable<List<Phone>> getAllPhonesRx();
 
     @Query("SELECT * FROM phone WHERE id=:id")
-    Flowable<List<Phone>> getPhoneById(long id);
+    Flowable<Phone> getPhoneById(long id);
 
 }
