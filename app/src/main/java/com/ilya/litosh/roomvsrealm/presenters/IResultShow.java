@@ -14,4 +14,6 @@ public interface IResultShow {
 
     void showSnappyDBResult(Context context, int type, int rows, long id);
 
+    void showORMLiteResult(Context context, int type, int rows, long id);
+
 }

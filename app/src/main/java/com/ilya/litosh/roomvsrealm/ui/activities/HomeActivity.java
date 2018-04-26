@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.ilya.litosh.roomvsrealm.R;
+import com.ilya.litosh.roomvsrealm.db.ormlite.ORMLiteService;
+import com.ilya.litosh.roomvsrealm.db.ormlite.models.Student;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.presenters.DBChooserPresenter;
 import com.ilya.litosh.roomvsrealm.presenters.DBResultPresenter;
@@ -19,6 +21,10 @@ import com.ilya.litosh.roomvsrealm.views.DBResultView;
 import com.ilya.litosh.roomvsrealm.views.TypeChooserView;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 //import io.realm.Realm;
 
@@ -43,7 +49,6 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         initComponents();
         initListeners();
 
@@ -64,7 +69,7 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
     private void initListeners(){
         submitButton.setOnClickListener(v -> {
             switch (spinnerType.getSelectedItemPosition()){
-                case 0:
+                case CRUDType.CREATE:
                     switch (spinnerDB.getSelectedItemPosition()){
                         case 0:
                             dbResultPresenter.showRealmResult(HomeActivity.this,
@@ -92,13 +97,19 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                             break;
                         case 4:
                             dbResultPresenter.showSnappyDBResult(HomeActivity.this,
+                                    CRUDType.CREATE,
+                                    Integer.valueOf(inputRows.getText().toString()),
+                                    0);
+                            break;
+                        case 5:
+                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
                                     CRUDType.CREATE,
                                     Integer.valueOf(inputRows.getText().toString()),
                                     0);
                             break;
                     }
                     break;
-                case 1:
+                case CRUDType.READ:
                     switch (spinnerDB.getSelectedItemPosition()){
                         case 0:
                             dbResultPresenter.showRealmResult(HomeActivity.this,
@@ -130,9 +141,14 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                                     0,
                                     0);
                             break;
+                        case 5:
+                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
+                                    CRUDType.READ,
+                                    0,
+                                    0);
                     }
                     break;
-                case 2:
+                case CRUDType.READ_SEARCHING:
                     switch (spinnerDB.getSelectedItemPosition()){
                         case 0:
                             dbResultPresenter.showRealmResult(HomeActivity.this,
@@ -160,6 +176,12 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
                             break;
                         case 4:
                             dbResultPresenter.showSnappyDBResult(HomeActivity.this,
+                                    CRUDType.READ_SEARCHING,
+                                    0,
+                                    Integer.valueOf(inputId.getText().toString()));
+                            break;
+                        case 5:
+                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
                                     CRUDType.READ_SEARCHING,
                                     0,
                                     Integer.valueOf(inputId.getText().toString()));

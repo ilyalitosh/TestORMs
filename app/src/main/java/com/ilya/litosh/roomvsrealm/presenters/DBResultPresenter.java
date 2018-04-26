@@ -9,6 +9,8 @@ import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
 import com.ilya.litosh.roomvsrealm.db.objectbox.OBoxService;
 import com.ilya.litosh.roomvsrealm.db.objectbox.models.Figure;
+import com.ilya.litosh.roomvsrealm.db.ormlite.ORMLiteService;
+import com.ilya.litosh.roomvsrealm.db.ormlite.models.Student;
 import com.ilya.litosh.roomvsrealm.db.realm.RealmService;
 import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
 import com.ilya.litosh.roomvsrealm.db.room.RoomService;
@@ -32,6 +34,8 @@ import io.reactivex.subscribers.DisposableSubscriber;
 
 @InjectViewState
 public class DBResultPresenter extends MvpPresenter<DBResultView> implements IResultShow{
+
+    private StringBuilder s = new StringBuilder();
 
     public DBResultPresenter(){
 
@@ -58,9 +62,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onNext(List<Phone> phones) {
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
-                                StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println(phones.size() + " элементов");
                             }
 
@@ -513,6 +517,104 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 s1.append(result).append(" сек.");
                                 getViewState().showResult(s1.toString());
                                 System.out.println("Name:" + book.getName() + " author:" + book.getAuthor());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
+        }
+    }
+
+    @Override
+    public void showORMLiteResult(Context context, int type, int rows, long id) {
+        ORMLiteService ormLiteService = new ORMLiteService();
+        switch (type){
+            case CRUDType.CREATE:
+                AtomicLong start = new AtomicLong();
+                AtomicLong end = new AtomicLong();
+                AtomicReference<Double> result = new AtomicReference<>((double) 0);
+                Observable.fromCallable(() -> {
+                    for(int i = 0; i < rows; i++){
+                        Student student = new Student();
+                        student.setFirstName("Илья");
+                        student.setSecondName("Литош");
+                        student.setAge(21);
+                        ormLiteService.addStudentRx(student).subscribe();
+                    }
+                    return new Object();
+                })
+                        .doOnSubscribe(disposable -> {
+                            start.set(System.currentTimeMillis());
+                        })
+                        .doOnComplete(() -> {
+                            end.set(System.currentTimeMillis());
+                            result.set((end.get() + .0 - start.get()) / 1000);
+                            s.append(result).append(" сек.");
+                            getViewState().showResult(s.toString());
+                            s.setLength(0);
+                        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+                break;
+            case CRUDType.READ:
+                ormLiteService.getStudentsRx()
+                        .subscribe(new Observer<List<Student>>() {
+                            private long start, end;
+                            private double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(List<Student> students) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                s.setLength(0);
+                                System.out.println("Найдено: " + students.size());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
+            case CRUDType.READ_SEARCHING:
+                ormLiteService.getStudentById((int)id)
+                        .subscribe(new Observer<Student>() {
+                            private long start, end;
+                            private double result;
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                start = System.currentTimeMillis();
+                            }
+
+                            @Override
+                            public void onNext(Student student) {
+                                end = System.currentTimeMillis();
+                                result = (end + .0 - start)/1000;
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                s.setLength(0);
+                                System.out.println("id:" + student.getId()
+                                        + " name:" + student.getFirstName());
                             }
 
                             @Override
