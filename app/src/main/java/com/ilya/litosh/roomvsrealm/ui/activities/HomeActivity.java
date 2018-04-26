@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.ilya.litosh.roomvsrealm.R;
-import com.ilya.litosh.roomvsrealm.db.ormlite.ORMLiteService;
-import com.ilya.litosh.roomvsrealm.db.ormlite.models.Student;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.presenters.DBChooserPresenter;
 import com.ilya.litosh.roomvsrealm.presenters.DBResultPresenter;
@@ -21,12 +19,6 @@ import com.ilya.litosh.roomvsrealm.views.DBResultView;
 import com.ilya.litosh.roomvsrealm.views.TypeChooserView;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-
-//import io.realm.Realm;
 
 public class HomeActivity extends MvpAppCompatActivity implements DBChooserView, TypeChooserView, DBResultView {
 

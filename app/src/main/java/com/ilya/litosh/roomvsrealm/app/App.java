@@ -1,8 +1,6 @@
 package com.ilya.litosh.roomvsrealm.app;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoMaster;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.DaoSession;
@@ -30,17 +28,20 @@ public class App extends Application {
         super.onCreate();
         // Realm
         Realm.init(this);
+        // GreenDAO
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "greendao-db");
         Database dbWrite = helper.getWritableDb();
         Database dbRead = helper.getReadableDb();
         daoWritingSession = new DaoMaster(dbWrite).newSession();
         daoReadingSession = new DaoMaster(dbRead).newSession();
 
+        // ORMLite
         ormliteHelper = new DBHelper(this);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
+        // ObjectBox
         boxStore = MyObjectBox.builder().androidContext(this).build();
+
+        // SnappyDB
         try {
             snappyDBSession = DBFactory.open(App.this, "snappydb-db");
         } catch (SnappydbException e) {
