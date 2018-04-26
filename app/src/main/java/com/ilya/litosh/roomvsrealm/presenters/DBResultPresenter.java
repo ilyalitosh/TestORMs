@@ -18,6 +18,7 @@ import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
 import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDBService;
 import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
+import com.ilya.litosh.roomvsrealm.presenters.result.ResultString;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
 import java.util.ArrayList;
@@ -102,10 +103,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
 
                     end = System.currentTimeMillis();
                     result = (end + .0 - start) / 1000;
-                    StringBuilder s = new StringBuilder();
                     s.append(result).append(" сек.");
-
                     getViewState().showResult(s.toString());
+                    s.setLength(0);
                     return new Object();
                 })
                         .subscribeOn(Schedulers.io())
@@ -119,14 +119,13 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                         .subscribe(new DisposableSubscriber<Phone>() {
                             private long start, end;
                             private double result;
-
                             @Override
                             public void onNext(Phone phone) {
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
-                                StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println("id:" + phone.getId() + " name:" + phone.getName());
                             }
 
@@ -171,9 +170,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 end1 = System.currentTimeMillis();
                                 result1 = (end1 + .0 - start1)/1000;
 
-                                StringBuilder s1 = new StringBuilder();
-                                s1.append(result1).append(" сек.");
-                                getViewState().showResult(s1.toString());
+                                s.append(result1).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println(cars.size() + " элементов");
                             }
 
@@ -200,9 +199,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                 }).doOnComplete(() -> {
                     end.set(System.currentTimeMillis());
                     result.set((end.get() + .0 - start.get())/1000);
-                    StringBuilder s = new StringBuilder();
                     s.append(result.get()).append(" сек.");
                     getViewState().showResult(s.toString());
+                    s.setLength(0);
                 })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -224,9 +223,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
 
-                                StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println(" id:" + car.getId() + " color:" + car.getColor());
                             }
 
@@ -262,9 +261,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onNext(List<Fruit> fruits) {
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
-                                StringBuilder s = new StringBuilder();
                                 s.append(result).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println(fruits.size() + " -----");
                             }
 
@@ -291,9 +290,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                 }).doOnComplete(() -> {
                     end.set(System.currentTimeMillis());
                     result.set((end.get() + .0 - start.get())/1000);
-                    StringBuilder s = new StringBuilder();
                     s.append(result.get()).append(" сек.");
                     getViewState().showResult(s.toString());
+                    s.setLength(0);
                 })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -325,9 +324,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onComplete() {
                                 end1.set(System.currentTimeMillis());
                                 result1.set((end1.get() + .0 - start1.get())/1000);
-                                StringBuilder s = new StringBuilder();
                                 s.append(result1.get()).append(" сек.");
                                 getViewState().showResult(s.toString());
+                                s.setLength(0);
                             }
                         });
         }
@@ -359,9 +358,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                 }).doOnComplete(() -> {
                     end.set(System.currentTimeMillis());
                     result.set((end.get() + .0 - start.get())/1000);
-                    StringBuilder s = new StringBuilder();
                     s.append(result.get()).append(" сек.");
                     getViewState().showResult(s.toString());
+                    s.setLength(0);
                     //System.out.println("Элементов в таблице сейчас: " + oBoxService.getAllFigures().size());
                 })
                         .subscribeOn(Schedulers.io())
@@ -458,9 +457,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                 }).doOnComplete(() -> {
                     end.set(System.currentTimeMillis());
                     result.set((end.get() + .0 - start.get())/1000);
-                    StringBuilder s = new StringBuilder();
                     s.append(result.get()).append(" сек.");
                     getViewState().showResult(s.toString());
+                    s.setLength(0);
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -481,9 +480,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                             public void onNext(List<Book> books) {
                                 end1.set(System.currentTimeMillis());
                                 result1.set((end1.get() + .0 - start1.get())/1000);
-                                StringBuilder s1 = new StringBuilder();
-                                s1.append(result1.get()).append(" сек.");
-                                getViewState().showResult(s1.toString());
+                                s.append(result1.get()).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println(books.size() + " элементов");
                             }
 
@@ -513,9 +512,9 @@ public class DBResultPresenter extends MvpPresenter<DBResultView> implements IRe
                                 end = System.currentTimeMillis();
                                 result = (end + .0 - start)/1000;
 
-                                StringBuilder s1 = new StringBuilder();
-                                s1.append(result).append(" сек.");
-                                getViewState().showResult(s1.toString());
+                                s.append(result).append(" сек.");
+                                getViewState().showResult(s.toString());
+                                s.setLength(0);
                                 System.out.println("Name:" + book.getName() + " author:" + book.getAuthor());
                             }
 

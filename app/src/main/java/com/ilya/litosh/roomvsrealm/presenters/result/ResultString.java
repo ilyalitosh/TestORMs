@@ -1,19 +1,20 @@
 package com.ilya.litosh.roomvsrealm.presenters.result;
 
-public class ResultString {
+public class ResultString{
 
-    private String s;
+    private ResultStringBuilder s;
 
-    public ResultString(){
+    private ResultString(){
 
     }
 
     public ResultString(String s){
-        this.s += s;
+        this.s = new ResultStringBuilder(s);
+        this.s.appendEndText();
     }
 
     @Override
     public String toString() {
-        return s;
+        return s.toString();
     }
 }
