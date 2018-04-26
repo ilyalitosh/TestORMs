@@ -18,7 +18,6 @@ import com.ilya.litosh.roomvsrealm.db.room.models.Phone;
 import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDBService;
 import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
 import com.ilya.litosh.roomvsrealm.models.CRUDType;
-import com.ilya.litosh.roomvsrealm.presenters.result.ResultString;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
 import java.util.ArrayList;
