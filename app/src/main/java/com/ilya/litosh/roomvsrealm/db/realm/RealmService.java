@@ -5,16 +5,13 @@ import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 
 public class RealmService implements IRealmService{
     RealmConfiguration config = new RealmConfiguration.Builder()
@@ -69,12 +66,8 @@ public class RealmService implements IRealmService{
     public Observable<List<Car>> getAllCarsRx() {
         Realm realm = Realm.getInstance(config);
         return Observable.just(Car.class)
-                .flatMap(new Function<Class<Car>, ObservableSource<List<Car>>>() {
-                    @Override
-                    public ObservableSource<List<Car>> apply(Class<Car> carClass) throws Exception {
-                        return Observable.just(realm.where(Car.class).findAll());
-                    }
-                })
+                .flatMap((Function<Class<Car>, ObservableSource<List<Car>>>) carClass ->
+                        Observable.just(realm.where(Car.class).findAll()))
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }

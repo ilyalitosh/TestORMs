@@ -62,127 +62,138 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
         submitButton.setOnClickListener(v -> {
             switch (spinnerType.getSelectedItemPosition()){
                 case CRUDType.CREATE:
-                    switch (spinnerDB.getSelectedItemPosition()){
-                        case 0:
-                            dbResultPresenter.showRealmResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                        case 1:
-                            dbResultPresenter.showRoomResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                        case 2:
-                            dbResultPresenter.showGreenDAOResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                        case 3:
-                            dbResultPresenter.showOBoxResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                        case 4:
-                            dbResultPresenter.showSnappyDBResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                        case 5:
-                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
-                                    CRUDType.CREATE,
-                                    Integer.valueOf(inputRows.getText().toString()),
-                                    0);
-                            break;
-                    }
+                    insertDB();
                     break;
                 case CRUDType.READ:
-                    switch (spinnerDB.getSelectedItemPosition()){
-                        case 0:
-                            dbResultPresenter.showRealmResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                            break;
-                        case 1:
-                            dbResultPresenter.showRoomResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                            break;
-                        case 2:
-                            dbResultPresenter.showGreenDAOResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                            break;
-                        case 3:
-                            dbResultPresenter.showOBoxResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                            break;
-                        case 4:
-                            dbResultPresenter.showSnappyDBResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                            break;
-                        case 5:
-                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
-                                    CRUDType.READ,
-                                    0,
-                                    0);
-                    }
+                    readDB();
                     break;
                 case CRUDType.READ_SEARCHING:
-                    switch (spinnerDB.getSelectedItemPosition()){
-                        case 0:
-                            dbResultPresenter.showRealmResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                        case 1:
-                            dbResultPresenter.showRoomResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                        case 2:
-                            dbResultPresenter.showGreenDAOResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                        case 3:
-                            dbResultPresenter.showOBoxResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                        case 4:
-                            dbResultPresenter.showSnappyDBResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                        case 5:
-                            dbResultPresenter.showORMLiteResult(HomeActivity.this,
-                                    CRUDType.READ_SEARCHING,
-                                    0,
-                                    Integer.valueOf(inputId.getText().toString()));
-                            break;
-                    }
+                    searchDB();
                     break;
             }
-
         });
+    }
+
+    private void searchDB() {
+        switch (spinnerDB.getSelectedItemPosition()){
+            case 0:
+                dbResultPresenter.showRealmResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+            case 1:
+                dbResultPresenter.showRoomResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+            case 2:
+                dbResultPresenter.showGreenDAOResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+            case 3:
+                dbResultPresenter.showOBoxResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+            case 4:
+                dbResultPresenter.showSnappyDBResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+            case 5:
+                dbResultPresenter.showORMLiteResult(getApplicationContext(),
+                        CRUDType.READ_SEARCHING,
+                        0,
+                        Integer.valueOf(inputId.getText().toString()));
+                break;
+        }
+    }
+
+    private void readDB() {
+        switch (spinnerDB.getSelectedItemPosition()){
+            case 0:
+                dbResultPresenter.showRealmResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+                break;
+            case 1:
+                dbResultPresenter.showRoomResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+                break;
+            case 2:
+                dbResultPresenter.showGreenDAOResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+                break;
+            case 3:
+                dbResultPresenter.showOBoxResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+                break;
+            case 4:
+                dbResultPresenter.showSnappyDBResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+                break;
+            case 5:
+                dbResultPresenter.showORMLiteResult(getApplicationContext(),
+                        CRUDType.READ,
+                        0,
+                        0);
+        }
+    }
+
+    private void insertDB() {
+        switch (spinnerDB.getSelectedItemPosition()){
+            case 0:
+                dbResultPresenter.showRealmResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+            case 1:
+                dbResultPresenter.showRoomResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+            case 2:
+                dbResultPresenter.showGreenDAOResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+            case 3:
+                dbResultPresenter.showOBoxResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+            case 4:
+                dbResultPresenter.showSnappyDBResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+            case 5:
+                dbResultPresenter.showORMLiteResult(getApplicationContext(),
+                        CRUDType.CREATE,
+                        Integer.valueOf(inputRows.getText().toString()),
+                        0);
+                break;
+        }
     }
 
     @Override
