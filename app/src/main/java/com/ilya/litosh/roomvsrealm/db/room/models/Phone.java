@@ -44,4 +44,5 @@ public class Phone {
     public void setPrice(int price) {
         this.price = price;
     }
+
 }

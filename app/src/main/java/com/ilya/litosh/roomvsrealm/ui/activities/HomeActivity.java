@@ -2,10 +2,12 @@ package com.ilya.litosh.roomvsrealm.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -60,16 +62,16 @@ public class HomeActivity extends MvpAppCompatActivity implements DBChooserView,
 
     private void initListeners(){
         submitButton.setOnClickListener(v -> {
-            switch (spinnerType.getSelectedItemPosition()){
-                case CRUDType.CREATE:
-                    insertDB();
-                    break;
-                case CRUDType.READ:
-                    readDB();
-                    break;
-                case CRUDType.READ_SEARCHING:
-                    searchDB();
-                    break;
+            if(!TextUtils.isEmpty(inputId.getText()) && !TextUtils.isEmpty(inputRows.getText())){
+                dbResultPresenter.execute(spinnerDB.getSelectedItemPosition(),
+                        spinnerType.getSelectedItemPosition(),
+                        Integer.valueOf(inputRows.getText().toString()),
+                        Integer.valueOf(inputId.getText().toString()));
+            }else{
+                Toast.makeText(HomeActivity.this,
+                                "Какое-то поле пустое",
+                                Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }

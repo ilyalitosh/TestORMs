@@ -21,13 +21,19 @@ public interface PhoneDAO {
     @Insert
     void addPhones(List<Phone> phones);
 
+    @Query("SELECT * FROM phone")
+    List<Phone> getAllPhones();
+
     @Delete
     void deletePhone(Phone phone);
+
+    @Query("SELECT * FROM phone WHERE id=:id")
+    Phone getPhoneById(long id);
 
     @Query("SELECT * FROM phone")
     Flowable<List<Phone>> getAllPhonesRx();
 
     @Query("SELECT * FROM phone WHERE id=:id")
-    Flowable<Phone> getPhoneById(long id);
+    Flowable<Phone> getPhoneByIdRx(long id);
 
 }
