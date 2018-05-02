@@ -1,7 +1,5 @@
 package com.ilya.litosh.roomvsrealm.presenters;
 
-import android.content.Context;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
