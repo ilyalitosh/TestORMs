@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.ilya.litosh.roomvsrealm.R;
-import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.presenters.DBChooserPresenter;
 import com.ilya.litosh.roomvsrealm.presenters.DBResultPresenter;
 import com.ilya.litosh.roomvsrealm.presenters.TypeChooserPresenter;
