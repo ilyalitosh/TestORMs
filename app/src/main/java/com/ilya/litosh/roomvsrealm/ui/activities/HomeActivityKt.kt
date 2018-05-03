@@ -37,6 +37,9 @@ class HomeActivityKt : MvpAppCompatActivity(), DBChooserView, TypeChooserView, D
         initComponents()
         initListeners()
 
+        dbChooserPresenter?.setAdapter(this, R.array.db_list)
+        typeChooserPresenter?.setAdapter(this, R.array.type_list)
+
     }
 
     private fun initListeners() {
