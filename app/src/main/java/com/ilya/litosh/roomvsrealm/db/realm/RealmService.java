@@ -42,11 +42,11 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
         return ResultString.getResult(start, System.currentTimeMillis());
     }
 
-
     @Override
     public Observable<String> reactiveInsertingRes(int rows) {
         return Observable.fromCallable(() -> {
             Realm realm = Realm.getInstance(config);
+            realm.beginTransaction();
             long start = System.currentTimeMillis();
             long id;
             try {
@@ -54,7 +54,6 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
             } catch (Exception e){
                 id = 0L;
             }
-            realm.beginTransaction();
             for(long i = id; i < id + rows; i++){
                 realm.insert(generateEntity(i));
             }
@@ -64,8 +63,6 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-
 
     @Override
     public String readingAllRes() {

@@ -1,5 +1,7 @@
 package com.ilya.litosh.roomvsrealm.presenters;
 
+import android.util.SparseArray;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
@@ -12,15 +14,13 @@ import com.ilya.litosh.roomvsrealm.models.CRUDType;
 import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
 import com.ilya.litosh.roomvsrealm.views.DBResultView;
 
-import java.util.HashMap;
-
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 @InjectViewState
 public class DBResultPresenter extends MvpPresenter<DBResultView>{
 
-    private HashMap<Integer, DBBaseModel> dbModels = new HashMap<>();
+    private SparseArray<DBBaseModel> dbModels = new SparseArray<>();
 
     public DBResultPresenter(){
         dbModels.put(0, new RealmService());
