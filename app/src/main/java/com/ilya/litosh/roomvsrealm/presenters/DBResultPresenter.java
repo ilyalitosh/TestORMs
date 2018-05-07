@@ -56,17 +56,17 @@ public class DBResultPresenter extends MvpPresenter<DBResultView>{
         switch (idMethod){
             case CRUDType.CREATE:
                 dbModels.get(idDB)
-                        .insertRx(rows)
+                        .reactiveInsertingRes(rows)
                         .subscribe(observer);
                 break;
             case CRUDType.READ:
                 dbModels.get(idDB)
-                        .getAllRx()
+                        .reactiveReadingAllRes()
                         .subscribe(observer);
                 break;
             case CRUDType.READ_SEARCHING:
                 dbModels.get(idDB)
-                        .getByIdRx(id)
+                        .reactiveReadingByIdRes(id)
                         .subscribe(observer);
                 break;
             default:

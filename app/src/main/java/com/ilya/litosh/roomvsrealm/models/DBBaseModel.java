@@ -4,16 +4,38 @@ import io.reactivex.Observable;
 
 public interface DBBaseModel {
 
-    String insert(int rows);
+    /**
+     * Возвращает строку с результатом вставки
+     * @param rows кол-во вставляемых строк
+     */
+    String insertingRes(int rows);
 
-    Observable<String> insertRx(int rows);
+    /**
+     * возвращает Observable c результатом вставки
+     * @param rows кол-во вставляемых строк
+     */
+    Observable<String> reactiveInsertingRes(int rows);
 
-    String getAll();
+    /**
+     * возвращает результат чтения всех записей
+     */
+    String readingAllRes();
 
-    Observable<String> getAllRx();
+    /**
+     * возвращает Observable с результатом чтения всех записей
+     */
+    Observable<String> reactiveReadingAllRes();
 
-    String getById(int id);
+    /**
+     * возвращает результат поиска по id
+     * @param id id для поиска
+     */
+    String readingByIdRes(int id);
 
-    Observable<String> getByIdRx(int id);
+    /**
+     * возвращает Observable с результатом поиска по id
+     * @param id id для поиска
+     */
+    Observable<String> reactiveReadingByIdRes(int id);
 
 }
