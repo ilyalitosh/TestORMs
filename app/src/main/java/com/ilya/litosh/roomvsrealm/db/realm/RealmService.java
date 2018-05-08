@@ -1,12 +1,13 @@
 package com.ilya.litosh.roomvsrealm.db.realm;
 
-import com.ilya.litosh.roomvsrealm.db.realm.migrations.DBMigration;
+import android.util.Log;
+
+import com.ilya.litosh.roomvsrealm.db.realm.migrations.DbMigration;
 import com.ilya.litosh.roomvsrealm.db.realm.models.Car;
-import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
+import com.ilya.litosh.roomvsrealm.models.DbBaseModel;
+import com.ilya.litosh.roomvsrealm.models.IAutoIncrement;
 import com.ilya.litosh.roomvsrealm.models.IEntityGenerator;
 import com.ilya.litosh.roomvsrealm.models.ResultString;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,31 +15,27 @@ import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
+import java.util.List;
+
+public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIncrement{
+
     private RealmConfiguration config = new RealmConfiguration.Builder()
             .schemaVersion(1)
-            .migration(new DBMigration())
+            .migration(new DbMigration())
             .build();
+    private static final String TAG = "RealmService";
 
     @Override
     public String insertingRes(int rows) {
         Realm realm = Realm.getInstance(config);
         long start = System.currentTimeMillis();
-        long id;
-
-        try{
-            id = realm.where(Car.class).max("id").intValue() + 1;
-        }catch (Exception e){
-            id = 0L;
-        }
-
         realm.beginTransaction();
+        long id = getId();
         for(long i = id; i < id + rows; i++){
             realm.insert(generateEntity(i));
         }
         realm.commitTransaction();
         realm.close();
-
         return ResultString.getResult(start, System.currentTimeMillis());
     }
 
@@ -48,12 +45,8 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
             Realm realm = Realm.getInstance(config);
             realm.beginTransaction();
             long start = System.currentTimeMillis();
-            long id;
-            try {
-                id = realm.where(Car.class).max("id").intValue() + 1;
-            } catch (Exception e){
-                id = 0L;
-            }
+            // TODO: check changes
+            long id = getId();
             for(long i = id; i < id + rows; i++){
                 realm.insert(generateEntity(i));
             }
@@ -70,7 +63,7 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
         long start = System.currentTimeMillis();
         List<Car> cars = realm.where(Car.class).findAll();
         long end = System.currentTimeMillis();
-        System.out.println(cars.size());
+        Log.i(TAG, "Надено: " + cars.size());
         return ResultString.getResult(start, end);
     }
 
@@ -79,16 +72,13 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
         return Observable.fromCallable(() -> {
             Realm realm = Realm.getInstance(config);
             long start = System.currentTimeMillis();
-
             realm.beginTransaction();
             List<Car> cars = realm.where(Car.class).findAll();
             realm.commitTransaction();
-
             long end = System.currentTimeMillis();
-            System.out.println("Надено: " + cars.size());
+            Log.i(TAG, "Надено: " + cars.size());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -100,7 +90,7 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
                 .equalTo("id", id)
                 .findFirst();
         long end = System.currentTimeMillis();
-        System.out.println(car.getId() + " "
+        Log.i(TAG, car.getId() + " "
                 + car.getColor() + " "
                 + car.getPrice());
         return ResultString.getResult(start, end);
@@ -115,12 +105,11 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
                     .equalTo("id", id)
                     .findFirst();
             long end = System.currentTimeMillis();
-            System.out.println(car.getId() + " "
+            Log.i(TAG,car.getId() + " "
                     + car.getColor() + " "
                     + car.getPrice());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -134,5 +123,15 @@ public class RealmService implements DBBaseModel, IEntityGenerator<Car>{
         car.setId(id);
 
         return car;
+    }
+
+    @Override
+    public long getId() {
+        try {
+            Realm realm = Realm.getInstance(config);
+            return realm.where(Car.class).max("id").intValue() + 1;
+        } catch (Exception e){
+            return 0L;
+        }
     }
 }

@@ -4,8 +4,12 @@ import com.arellomobile.mvp.MvpView;
 
 import java.util.List;
 
-public interface DBChooserView extends MvpView {
+public interface DbChooserView extends MvpView {
 
+    /**
+     * Sets DbSpinner adapter
+     * @param data titles db
+     */
     void setDBAdapter(List<String> data);
 
 }

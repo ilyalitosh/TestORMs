@@ -1,6 +1,6 @@
 package com.ilya.litosh.roomvsrealm.models;
 
-public final class CRUDType {
+public final class CrudType {
 
     public static final int CREATE = 0;
 

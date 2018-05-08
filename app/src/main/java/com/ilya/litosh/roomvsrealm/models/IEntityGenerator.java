@@ -3,8 +3,8 @@ package com.ilya.litosh.roomvsrealm.models;
 public interface IEntityGenerator<T> {
 
     /**
-     * генерирует указанную сущность
-     * @param id id сущности, если id не нужно указывать, то поставить 0
+     * Generates chosen entity
+     * @param id entity id, if don't need id, use 0
      */
     T generateEntity(long id);
 

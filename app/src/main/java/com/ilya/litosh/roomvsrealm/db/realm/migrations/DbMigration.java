@@ -4,7 +4,7 @@ import io.realm.DynamicRealm;
 import io.realm.RealmMigration;
 import io.realm.RealmSchema;
 
-public class DBMigration implements RealmMigration {
+public class DbMigration implements RealmMigration {
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         RealmSchema schema = realm.getSchema();
@@ -24,6 +24,6 @@ public class DBMigration implements RealmMigration {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof DBMigration);
+        return (obj instanceof DbMigration);
     }
 }

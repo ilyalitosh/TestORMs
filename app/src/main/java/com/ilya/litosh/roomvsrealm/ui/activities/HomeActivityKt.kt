@@ -10,11 +10,9 @@ import com.ilya.litosh.roomvsrealm.R
 import com.ilya.litosh.roomvsrealm.presenters.DBChooserPresenter
 import com.ilya.litosh.roomvsrealm.presenters.DBResultPresenter
 import com.ilya.litosh.roomvsrealm.presenters.TypeChooserPresenter
-import com.ilya.litosh.roomvsrealm.views.DBChooserView
-import com.ilya.litosh.roomvsrealm.views.DBResultView
 import com.ilya.litosh.roomvsrealm.views.TypeChooserView
 
-class HomeActivityKt : MvpAppCompatActivity(), DBChooserView, TypeChooserView, DBResultView{
+class HomeActivityKt : MvpAppCompatActivity(), TypeChooserView {
 
     @InjectPresenter
     var dbChooserPresenter: DBChooserPresenter? = null

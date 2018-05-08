@@ -8,6 +8,11 @@ public final class ResultString {
 
     }
 
+    /**
+     * Returns time string
+     * @param start start time
+     * @param end end time
+     */
     public static String getResult(long start, long end){
         s.setLength(0);
         s.append((end + .0 - start)/1000)

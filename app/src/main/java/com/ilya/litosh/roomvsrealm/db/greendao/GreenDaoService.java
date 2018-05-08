@@ -1,43 +1,35 @@
 package com.ilya.litosh.roomvsrealm.db.greendao;
 
+import android.util.Log;
+
 import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.Fruit;
 import com.ilya.litosh.roomvsrealm.db.greendao.models.FruitDao;
-import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
+import com.ilya.litosh.roomvsrealm.models.DbBaseModel;
+import com.ilya.litosh.roomvsrealm.models.IAutoIncrement;
 import com.ilya.litosh.roomvsrealm.models.IEntityGenerator;
 import com.ilya.litosh.roomvsrealm.models.ResultString;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
+import java.util.List;
+
+public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IAutoIncrement {
+
+    private static final String TAG = "GreenDaoService" ;
 
     @Override
     public String insertingRes(int rows) {
         long start = System.currentTimeMillis();
-        long id;
-        try{
-            id = App.getDaoReadingSession()
-                    .getFruitDao()
-                    .queryBuilder()
-                    .offset((int)App.getDaoReadingSession()
-                            .getFruitDao().count() - 1)
-                    .limit(1)
-                    .list()
-                    .get(0)
-                    .getId() + 1;
-        }catch (IndexOutOfBoundsException e){
-            id = 0L;
-        }
+        // TODO: check changes
+        long id = getId();
         for(long i = id; i < rows + id; i++){
             App.getDaoWritingSession()
                     .getFruitDao()
                     .insert(generateEntity(i));
         }
-
         return ResultString.getResult(start, System.currentTimeMillis());
     }
 
@@ -45,28 +37,14 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
     public Observable<String> reactiveInsertingRes(int rows) {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
-            long id;
-            try{
-                id = App.getDaoReadingSession()
-                        .getFruitDao()
-                        .queryBuilder()
-                        .offset((int)App.getDaoReadingSession()
-                                .getFruitDao().count() - 1)
-                        .limit(1)
-                        .list()
-                        .get(0)
-                        .getId() + 1;
-            }catch (IndexOutOfBoundsException e){
-                id = 0L;
-            }
+            long id = getId();
             for(long i = id; i < rows + id; i++){
                 App.getDaoWritingSession()
                         .getFruitDao()
                         .insert(generateEntity(i));
             }
             return ResultString.getResult(start, System.currentTimeMillis());
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -77,7 +55,7 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
                 .getFruitDao()
                 .loadAll();
         long end = System.currentTimeMillis();
-        System.out.println("Найдено: " + fruits.size());
+        Log.i(TAG, "Найдено: " + fruits.size());
         return ResultString.getResult(start, end);
     }
 
@@ -89,10 +67,9 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
                             .getFruitDao()
                             .loadAll();
             long end = System.currentTimeMillis();
-            System.out.println("Найдено: " + fruits.size());
+            Log.i(TAG, "Найдено: " + fruits.size());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -109,7 +86,7 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
                 .list()
                 .get(0);
         long end = System.currentTimeMillis();
-        System.out.println(fruit.getId() + " "
+        Log.i(TAG, fruit.getId() + " "
                 + fruit.getName() + " "
                 + fruit.getColor() + " "
                 + fruit.getWeight());
@@ -130,13 +107,12 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
                     .list()
                     .get(0);
             long end = System.currentTimeMillis();
-            /*System.out.println(fruit.getId() + " "
+            Log.i(TAG, fruit.getId() + " "
                     + fruit.getName() + " "
                     + fruit.getColor() + " "
-                    + fruit.getWeight());*/
+                    + fruit.getWeight());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -151,4 +127,22 @@ public class GreenDAOService implements DBBaseModel, IEntityGenerator<Fruit> {
 
         return apple;
     }
+
+    @Override
+    public long getId() {
+        try{
+            return App.getDaoReadingSession()
+                    .getFruitDao()
+                    .queryBuilder()
+                    .offset((int)App.getDaoReadingSession()
+                            .getFruitDao().count() - 1)
+                    .limit(1)
+                    .list()
+                    .get(0)
+                    .getId() + 1;
+        }catch (IndexOutOfBoundsException e){
+            return 0L;
+        }
+    }
+
 }

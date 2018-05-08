@@ -4,11 +4,7 @@ import android.content.Context;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.ilya.litosh.roomvsrealm.views.DBChooserView;
-import com.ilya.litosh.roomvsrealm.views.DBResultView;
-
-import java.util.Arrays;
-import java.util.List;
+import com.ilya.litosh.roomvsrealm.views.DbChooserView;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -16,10 +12,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-@InjectViewState
-public class DBChooserPresenter extends MvpPresenter<DBChooserView> implements IChooser {
+import java.util.Arrays;
+import java.util.List;
 
-    public DBChooserPresenter(){
+@InjectViewState
+public class DbChooserPresenter extends MvpPresenter<DbChooserView> implements IChooser {
+
+    public DbChooserPresenter(){
     }
 
     @Override

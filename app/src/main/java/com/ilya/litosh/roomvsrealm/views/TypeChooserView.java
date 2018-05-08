@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface TypeChooserView extends MvpView {
 
+    /**
+     * Sets TypeSpinner adapter
+     * @param data titles crud type
+     */
     void setTypeAdapter(List<String> data);
 
 }

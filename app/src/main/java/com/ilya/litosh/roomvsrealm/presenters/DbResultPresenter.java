@@ -1,36 +1,45 @@
 package com.ilya.litosh.roomvsrealm.presenters;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.ilya.litosh.roomvsrealm.db.greendao.GreenDAOService;
-import com.ilya.litosh.roomvsrealm.db.objectbox.OBoxService;
-import com.ilya.litosh.roomvsrealm.db.ormlite.ORMLiteService;
+import com.ilya.litosh.roomvsrealm.db.greendao.GreenDaoService;
+import com.ilya.litosh.roomvsrealm.db.objectbox.ObjectBoxService;
+import com.ilya.litosh.roomvsrealm.db.ormlite.OrmLiteService;
 import com.ilya.litosh.roomvsrealm.db.realm.RealmService;
 import com.ilya.litosh.roomvsrealm.db.room.RoomService;
-import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDBService;
-import com.ilya.litosh.roomvsrealm.models.CRUDType;
-import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
-import com.ilya.litosh.roomvsrealm.views.DBResultView;
+import com.ilya.litosh.roomvsrealm.db.snappydb.SnappyDbService;
+import com.ilya.litosh.roomvsrealm.models.CrudType;
+import com.ilya.litosh.roomvsrealm.models.DbBaseModel;
+import com.ilya.litosh.roomvsrealm.views.DbResultView;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 @InjectViewState
-public class DBResultPresenter extends MvpPresenter<DBResultView>{
+public class DbResultPresenter extends MvpPresenter<DbResultView>{
 
-    private SparseArray<DBBaseModel> dbModels = new SparseArray<>();
+    private SparseArray<DbBaseModel> mDbModels = new SparseArray<>();
+    private static final String TAG = "DbResultPresenter";
 
-    public DBResultPresenter(){
-        dbModels.put(0, new RealmService());
-        dbModels.put(1, new RoomService());
-        dbModels.put(2, new GreenDAOService());
-        dbModels.put(3, new OBoxService());
-        dbModels.put(4, new SnappyDBService());
-        dbModels.put(5, new ORMLiteService());
+    public DbResultPresenter(){
+        mDbModels.put(0, new RealmService());
+        mDbModels.put(1, new RoomService());
+        mDbModels.put(2, new GreenDaoService());
+        mDbModels.put(3, new ObjectBoxService());
+        mDbModels.put(4, new SnappyDbService());
+        mDbModels.put(5, new OrmLiteService());
     }
 
+    /**
+     * Executes request to DB
+     * @param idDB db id
+     * @param idMethod method id
+     * @param rows rows count
+     * @param id id for searching entity
+     */
     public void execute(int idDB, int idMethod, int rows, int id){
         Observer<String> observer = new Observer<String>() {
             @Override
@@ -45,7 +54,7 @@ public class DBResultPresenter extends MvpPresenter<DBResultView>{
 
             @Override
             public void onError(Throwable e) {
-                System.out.println("---------------- " + e);
+                Log.i(TAG, e.toString());
             }
 
             @Override
@@ -54,18 +63,18 @@ public class DBResultPresenter extends MvpPresenter<DBResultView>{
             }
         };
         switch (idMethod){
-            case CRUDType.CREATE:
-                dbModels.get(idDB)
+            case CrudType.CREATE:
+                mDbModels.get(idDB)
                         .reactiveInsertingRes(rows)
                         .subscribe(observer);
                 break;
-            case CRUDType.READ:
-                dbModels.get(idDB)
+            case CrudType.READ:
+                mDbModels.get(idDB)
                         .reactiveReadingAllRes()
                         .subscribe(observer);
                 break;
-            case CRUDType.READ_SEARCHING:
-                dbModels.get(idDB)
+            case CrudType.READ_SEARCHING:
+                mDbModels.get(idDB)
                         .reactiveReadingByIdRes(id)
                         .subscribe(observer);
                 break;

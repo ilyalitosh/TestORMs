@@ -11,11 +11,11 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-public class DBHelper extends OrmLiteSqliteOpenHelper {
+public class DbHelper extends OrmLiteSqliteOpenHelper {
 
     private static Dao<Student, Integer> studentDAO = null;
 
-    public DBHelper(Context context) {
+    public DbHelper(Context context) {
         super(context, "ormlite-db", null, 1);
     }
 

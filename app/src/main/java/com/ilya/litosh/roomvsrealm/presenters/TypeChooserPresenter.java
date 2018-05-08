@@ -1,13 +1,11 @@
 package com.ilya.litosh.roomvsrealm.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.ilya.litosh.roomvsrealm.views.TypeChooserView;
-
-import java.util.Arrays;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -15,8 +13,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.Arrays;
+import java.util.List;
+
 @InjectViewState
 public class TypeChooserPresenter extends MvpPresenter<TypeChooserView> implements IChooser {
+
+    private static final String TAG = "TypeChooserPresenter";
 
     public TypeChooserPresenter(){
 
@@ -42,7 +45,7 @@ public class TypeChooserPresenter extends MvpPresenter<TypeChooserView> implemen
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.i(TAG, e.toString());
                     }
 
                     @Override

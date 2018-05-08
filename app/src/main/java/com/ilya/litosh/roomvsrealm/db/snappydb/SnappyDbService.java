@@ -1,37 +1,40 @@
 package com.ilya.litosh.roomvsrealm.db.snappydb;
 
+import android.util.Log;
+
 import com.ilya.litosh.roomvsrealm.app.App;
 import com.ilya.litosh.roomvsrealm.db.snappydb.models.Book;
-import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
+import com.ilya.litosh.roomvsrealm.models.DbBaseModel;
 import com.ilya.litosh.roomvsrealm.models.IEntityGenerator;
 import com.ilya.litosh.roomvsrealm.models.ResultString;
 import com.snappydb.SnappydbException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ilya_ on 22.04.2018.
  */
 
-public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
+public class SnappyDbService implements DbBaseModel, IEntityGenerator<Book> {
+
+    private static final String TAG = "SnappyDbService";
 
     @Override
     public String insertingRes(int rows) {
         long start = System.currentTimeMillis();
-
         for(int i = 0; i < rows; i++){
             try {
-                App.getSnappyDBSession().put("android:" + String.valueOf(i), generateEntity(0));
+                App.getSnappyDBSession()
+                        .put("android:" + String.valueOf(i), generateEntity(0));
             } catch (SnappydbException e) {
                 e.printStackTrace();
             }
         }
-
         return ResultString.getResult(start, System.currentTimeMillis());
     }
 
@@ -41,12 +44,12 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
             long start = System.currentTimeMillis();
             for(int i = 0; i < rows; i++){
                 try {
-                    App.getSnappyDBSession().put("android:" + String.valueOf(i), generateEntity(0));
+                    App.getSnappyDBSession()
+                            .put("android:" + String.valueOf(i), generateEntity(0));
                 } catch (SnappydbException e) {
                     e.printStackTrace();
                 }
             }
-
             return ResultString.getResult(start, System.currentTimeMillis());
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -56,7 +59,6 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
     public String readingAllRes() {
         long start = System.currentTimeMillis();
         long end = 0;
-
         String[] keys;
         try {
             keys = App.getSnappyDBSession().findKeys("android:");
@@ -65,11 +67,10 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
                 books.add(App.getSnappyDBSession().getObject(keys[i], Book.class));
             }
             end = System.currentTimeMillis();
-            System.out.println("Найдено: " + books.size());
+            Log.i(TAG, "Найдено: " + books.size());
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
-
         return ResultString.getResult(start, end);
     }
 
@@ -78,7 +79,6 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             long end = 0;
-
             String[] keys;
             try {
                 keys = App.getSnappyDBSession().findKeys("android:");
@@ -87,11 +87,10 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
                     books.add(App.getSnappyDBSession().getObject(keys[i], Book.class));
                 }
                 end = System.currentTimeMillis();
-                System.out.println("Найдено: " + books.size());
+                Log.i(TAG, "Найдено: " + books.size());
             } catch (SnappydbException e) {
                 e.printStackTrace();
             }
-
             return ResultString.getResult(start, end);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -101,17 +100,15 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
     public String readingByIdRes(int id) {
         long start = System.currentTimeMillis();
         long end = 0;
-
         try {
             Book book = App.getSnappyDBSession().getObject("android:" + id, Book.class);
             end = System.currentTimeMillis();
-            System.out.println(book.getName() + " "
+            Log.i(TAG, book.getName() + " "
                     + book.getAuthor() + " "
                     + book.getPagesCount());
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
-
         return ResultString.getResult(start, end);
     }
 
@@ -120,17 +117,15 @@ public class SnappyDBService implements DBBaseModel, IEntityGenerator<Book> {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             long end = 0;
-
             try {
                 Book book = App.getSnappyDBSession().getObject("android:" + id, Book.class);
                 end = System.currentTimeMillis();
-                System.out.println(book.getName() + " "
+                Log.i(TAG, book.getName() + " "
                         + book.getAuthor() + " "
                         + book.getPagesCount());
             } catch (SnappydbException e) {
                 e.printStackTrace();
             }
-
             return ResultString.getResult(start, end);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

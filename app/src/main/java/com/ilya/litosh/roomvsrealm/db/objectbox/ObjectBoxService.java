@@ -1,7 +1,9 @@
 package com.ilya.litosh.roomvsrealm.db.objectbox;
 
+import android.util.Log;
+
 import com.ilya.litosh.roomvsrealm.app.App;
-import com.ilya.litosh.roomvsrealm.models.DBBaseModel;
+import com.ilya.litosh.roomvsrealm.models.DbBaseModel;
 import com.ilya.litosh.roomvsrealm.db.objectbox.models.Figure;
 import com.ilya.litosh.roomvsrealm.models.IEntityGenerator;
 import com.ilya.litosh.roomvsrealm.models.ResultString;
@@ -17,7 +19,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by ilya_ on 22.04.2018.
  */
 
-public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
+public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
+
+    private static final String TAG = "ObjectBoxService";
 
     @Override
     public String insertingRes(int rows) {
@@ -26,22 +30,19 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
         for(int i = 0; i < rows; i++){
             figureBox.put(generateEntity(0));
         }
-
         return ResultString.getResult(start, System.currentTimeMillis());
     }
 
     @Override
     public Observable<String> reactiveInsertingRes(int rows) {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
-
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             for(int i = 0; i < rows; i++){
                 figureBox.put(generateEntity(0));
             }
             return ResultString.getResult(start, System.currentTimeMillis());
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -51,7 +52,7 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
         long start = System.currentTimeMillis();
         List<Figure> figures = figureBox.getAll();
         long end = System.currentTimeMillis();
-        //System.out.println("Найдено: " + figures.size());
+        Log.i(TAG, "Найдено: " + figures.size());
 
         return ResultString.getResult(start, end);
     }
@@ -63,10 +64,9 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
             long start = System.currentTimeMillis();
             List<Figure> figures = figureBox.getAll();
             long end = System.currentTimeMillis();
-            System.out.println("Найдено: " + figures.size());
+            Log.i(TAG, "Найдено: " + figures.size());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -76,7 +76,7 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
         long start = System.currentTimeMillis();
         Figure figure = figureBox.get(id);
         long end = System.currentTimeMillis();
-        System.out.println(figure.getId() + " "
+        Log.i(TAG, figure.getId() + " "
                 + figure.getName() + " "
                 + figure.getArea());
         return ResultString.getResult(start, end);
@@ -89,12 +89,11 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
             long start = System.currentTimeMillis();
             Figure figure = figureBox.get(id);
             long end = System.currentTimeMillis();
-            System.out.println(figure.getId() + " "
+            Log.i(TAG, figure.getId() + " "
                     + figure.getName() + " "
                     + figure.getArea());
             return ResultString.getResult(start, end);
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -107,4 +106,5 @@ public class OBoxService implements DBBaseModel, IEntityGenerator<Figure> {
 
         return square;
     }
+
 }
