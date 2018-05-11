@@ -20,7 +20,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     private static final String TAG = "OrmLiteService";
 
     @Override
-    public String insertingRes(int rows) {
+    public String insertingResult(int rows) {
         long start = System.currentTimeMillis();
         for(int i = 0; i < rows; i++){
             try {
@@ -33,7 +33,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     }
 
     @Override
-    public Observable<String> reactiveInsertingRes(int rows) {
+    public Observable<String> reactiveInsertingResult(int rows) {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             for(int i = 0; i < rows; i++){
@@ -49,7 +49,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     }
 
     @Override
-    public String readingAllRes() {
+    public String readingAllResult() {
         long start = System.currentTimeMillis();
         long end = 0;
         try {
@@ -63,7 +63,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     }
 
     @Override
-    public Observable<String> reactiveReadingAllRes() {
+    public Observable<String> reactiveReadingAllResult() {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             long end = 0;
@@ -82,7 +82,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     }
 
     @Override
-    public String readingByIdRes(int id) {
+    public String readingByIdResult(int id) {
         long start = System.currentTimeMillis();
         long end = 0;
         try {
@@ -98,7 +98,7 @@ public class OrmLiteService implements DbBaseModel, IEntityGenerator<Student> {
     }
 
     @Override
-    public Observable<String> reactiveReadingByIdRes(int id) {
+    public Observable<String> reactiveReadingByIdResult(int id) {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             long end = 0;

@@ -24,7 +24,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     private static final String TAG = "ObjectBoxService";
 
     @Override
-    public String insertingRes(int rows) {
+    public String insertingResult(int rows) {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         long start = System.currentTimeMillis();
         for(int i = 0; i < rows; i++){
@@ -34,7 +34,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     }
 
     @Override
-    public Observable<String> reactiveInsertingRes(int rows) {
+    public Observable<String> reactiveInsertingResult(int rows) {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
@@ -47,7 +47,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     }
 
     @Override
-    public String readingAllRes() {
+    public String readingAllResult() {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         long start = System.currentTimeMillis();
         List<Figure> figures = figureBox.getAll();
@@ -58,7 +58,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     }
 
     @Override
-    public Observable<String> reactiveReadingAllRes() {
+    public Observable<String> reactiveReadingAllResult() {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
@@ -71,7 +71,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     }
 
     @Override
-    public String readingByIdRes(int id) {
+    public String readingByIdResult(int id) {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         long start = System.currentTimeMillis();
         Figure figure = figureBox.get(id);
@@ -83,7 +83,7 @@ public class ObjectBoxService implements DbBaseModel, IEntityGenerator<Figure> {
     }
 
     @Override
-    public Observable<String> reactiveReadingByIdRes(int id) {
+    public Observable<String> reactiveReadingByIdResult(int id) {
         Box<Figure> figureBox = App.getOBoxSession().boxFor(Figure.class);
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();

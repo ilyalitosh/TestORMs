@@ -21,7 +21,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     private static final String TAG = "GreenDaoService" ;
 
     @Override
-    public String insertingRes(int rows) {
+    public String insertingResult(int rows) {
         long start = System.currentTimeMillis();
         // TODO: check changes
         long id = getId();
@@ -34,7 +34,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     }
 
     @Override
-    public Observable<String> reactiveInsertingRes(int rows) {
+    public Observable<String> reactiveInsertingResult(int rows) {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             long id = getId();
@@ -49,7 +49,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     }
 
     @Override
-    public String readingAllRes() {
+    public String readingAllResult() {
         long start = System.currentTimeMillis();
         List<Fruit> fruits = App.getDaoReadingSession()
                 .getFruitDao()
@@ -60,7 +60,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     }
 
     @Override
-    public Observable<String> reactiveReadingAllRes() {
+    public Observable<String> reactiveReadingAllResult() {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             List<Fruit> fruits = App.getDaoReadingSession()
@@ -74,7 +74,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     }
 
     @Override
-    public String readingByIdRes(int id) {
+    public String readingByIdResult(int id) {
         long start = System.currentTimeMillis();
         Fruit fruit = App.getDaoReadingSession()
                 .getFruitDao()
@@ -94,7 +94,7 @@ public class GreenDaoService implements DbBaseModel, IEntityGenerator<Fruit>, IA
     }
 
     @Override
-    public Observable<String> reactiveReadingByIdRes(int id) {
+    public Observable<String> reactiveReadingByIdResult(int id) {
         return Observable.fromCallable(() -> {
             long start = System.currentTimeMillis();
             Fruit fruit = App.getDaoReadingSession()

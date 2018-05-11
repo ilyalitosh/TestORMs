@@ -26,7 +26,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     private static final String TAG = "RealmService";
 
     @Override
-    public String insertingRes(int rows) {
+    public String insertingResult(int rows) {
         Realm realm = Realm.getInstance(config);
         long start = System.currentTimeMillis();
         realm.beginTransaction();
@@ -40,7 +40,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     }
 
     @Override
-    public Observable<String> reactiveInsertingRes(int rows) {
+    public Observable<String> reactiveInsertingResult(int rows) {
         return Observable.fromCallable(() -> {
             Realm realm = Realm.getInstance(config);
             realm.beginTransaction();
@@ -58,7 +58,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     }
 
     @Override
-    public String readingAllRes() {
+    public String readingAllResult() {
         Realm realm = Realm.getInstance(config);
         long start = System.currentTimeMillis();
         List<Car> cars = realm.where(Car.class).findAll();
@@ -68,7 +68,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     }
 
     @Override
-    public Observable<String> reactiveReadingAllRes() {
+    public Observable<String> reactiveReadingAllResult() {
         return Observable.fromCallable(() -> {
             Realm realm = Realm.getInstance(config);
             long start = System.currentTimeMillis();
@@ -83,7 +83,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     }
 
     @Override
-    public String readingByIdRes(int id) {
+    public String readingByIdResult(int id) {
         Realm realm = Realm.getInstance(config);
         long start = System.currentTimeMillis();
         Car car = realm.where(Car.class)
@@ -97,7 +97,7 @@ public class RealmService implements DbBaseModel, IEntityGenerator<Car>, IAutoIn
     }
 
     @Override
-    public Observable<String> reactiveReadingByIdRes(int id) {
+    public Observable<String> reactiveReadingByIdResult(int id) {
         return Observable.fromCallable(() -> {
             Realm realm = Realm.getInstance(config);
             long start = System.currentTimeMillis();

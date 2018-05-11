@@ -49,6 +49,8 @@ public class HomeActivity extends MvpAppCompatActivity implements DbChooserView,
         dbChooserPresenter.setAdapter(this, R.array.db_list);
         typeChooserPresenter.setAdapter(this, R.array.type_list);
 
+
+
     }
 
     private void initComponents(){
